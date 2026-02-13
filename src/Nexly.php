@@ -2,8 +2,6 @@
 
 namespace Nexly;
 
-use Engine\Provider\Impl\Minecraft\Block\BlockIds;
-use Engine\Util\SingletonTrait;
 use Nexly\Blocks\AsyncInitialization;
 use Nexly\Blocks\BlockPalette;
 use Nexly\Events\Impl\BlockRegistryEvent;
@@ -14,14 +12,11 @@ use Nexly\Listener\LadderClimbingListener;
 use Nexly\Mappings\BlockMappings;
 use Nexly\Recipes\NexlyRecipes;
 use Nexly\Tasks\AsyncRegisterBlocksTask;
-use pocketmine\block\GlassPane;
 use pocketmine\event\EventPriority;
-use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\network\mcpe\protocol\StartGamePacket;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\ClosureTask;
-use pocketmine\Server;
 
 class Nexly extends PluginBase
 {

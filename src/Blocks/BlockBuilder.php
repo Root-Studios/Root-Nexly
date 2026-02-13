@@ -6,8 +6,11 @@ use Closure;
 use Generator;
 use Nexly\Blocks\Components\BlockComponent;
 use Nexly\Blocks\Components\BlockComponentIds;
+use Nexly\Blocks\Components\BonemealableComponent;
 use Nexly\Blocks\Components\BreathabilityBlockComponent;
 use Nexly\Blocks\Components\CollisionBoxBlockComponent;
+use Nexly\Blocks\Components\ConnectionRuleComponent;
+use Nexly\Blocks\Components\CropsComponent;
 use Nexly\Blocks\Components\CustomComponentsBlockComponent;
 use Nexly\Blocks\Components\DestructibleByExplosionBlockComponent;
 use Nexly\Blocks\Components\DestructibleByMiningBlockComponent;
@@ -15,6 +18,7 @@ use Nexly\Blocks\Components\DisplayNameBlockComponent;
 use Nexly\Blocks\Components\FrictionBlockComponent;
 use Nexly\Blocks\Components\LightEmissionBlockComponent;
 use Nexly\Blocks\Components\MaterialInstancesBlockComponent;
+use Nexly\Blocks\Components\OnInteractComponent;
 use Nexly\Blocks\Components\OnPlayerPlacingBlockComponent;
 use Nexly\Blocks\Components\SelectionBoxBlockComponent;
 use Nexly\Blocks\Components\Types\BreathabilityType;
@@ -48,6 +52,7 @@ use pocketmine\block\Door;
 use pocketmine\block\Farmland;
 use pocketmine\block\Fence;
 use pocketmine\block\FenceGate;
+use pocketmine\block\Flowable;
 use pocketmine\block\Flower;
 use pocketmine\block\GlassPane;
 use pocketmine\block\Hopper;
@@ -643,8 +648,16 @@ class BlockBuilder
             $this->addComponent(new FrictionBlockComponent(max(0, 1 - $block->getFrictionFactor())));
             $this->addComponent(new LightEmissionBlockComponent($block->getLightLevel()));
             //$this->addComponent(new LiquidDetectionComponent(false)); // TODO: PMMP Implement Liquid Layer
-            $this->addComponent(new MaterialInstancesBlockComponent([new Material($this->getName(), renderMethod: $block->isTransparent() ? MaterialRenderMethod::ALPHA_TEST : MaterialRenderMethod::OPAQUE)]));
+            $this->addComponent(new MaterialInstancesBlockComponent([new Material($this->getName(), renderMethod: $block->isTransparent() ? MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED : MaterialRenderMethod::OPAQUE)]));
             $this->addComponent(new OnPlayerPlacingBlockComponent());
+
+            if ($block instanceof Flowable) {
+                $this->addComponent(new ConnectionRuleComponent());
+            }
+            if ($block instanceof Crops) {
+                $this->addComponent(new CropsComponent());
+                $this->addComponent(new BonemealableComponent());
+            }
 
             $tile = $block->getIdInfo()->getTileClass();
             if ($tile !== null && is_a($tile, Container::class, true)) {
