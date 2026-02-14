@@ -35,8 +35,6 @@ class IconProperty extends PropertyItemComponent
                 "textures",
                 CompoundTag::create()
                 ->setTag("default", new StringTag($this->icon))
-                ->setTag("dyed", new StringTag($this->icon . ".dyed"))
-                ->setTag("icon_trim", new StringTag($this->icon . ".trim"))
             );
     }
 }

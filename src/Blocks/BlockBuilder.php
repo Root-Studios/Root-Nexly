@@ -656,7 +656,6 @@ class BlockBuilder
             }
             if ($block instanceof Crops) {
                 $this->addComponent(new CropsComponent());
-                $this->addComponent(new BonemealableComponent());
             }
 
             $tile = $block->getIdInfo()->getTileClass();
