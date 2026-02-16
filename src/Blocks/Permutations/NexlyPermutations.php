@@ -66,6 +66,8 @@ use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\types\BlockPosition;
 use ReflectionClass;
+use root\core\block\Mushroom;
+use root\core\block\PlowedMycelium;
 use RuntimeException;
 
 final class NexlyPermutations
@@ -89,6 +91,28 @@ final class NexlyPermutations
                 ->addComponent(SelectionBoxBlockComponent::fromCrops($block, $age))
                 ->addComponent(new MaterialInstancesBlockComponent([new Material($builder->getName() . "_{$age}", renderMethod: MaterialRenderMethod::ALPHA_TEST)])));
         }
+    }
+
+    public static function makeMushroom(Builder $builder, Mushroom $block): void
+    {
+        $stringId = $builder->getStringId();
+        $builder->setSerializer(static fn (Mushroom $block) => self::encodeMushroom($block, new Writer($stringId)));
+        $builder->setDeserializer(static fn (Reader $in) => self::decodeMushroom(clone $block, $in));
+        $builder->addProperty(new BlockProperty(StateNames::GROWTH, $ages = range(0, $block::MAX_AGE)));
+        $builder->addComponent(new GeometryBlockComponent("geometry.custom_crops_2"));
+        foreach ($ages as $age) {
+            $builder->addPermutation(Permutation::create("q.block_state('" . StateNames::GROWTH . "') == {$age}")
+                ->addComponent(SelectionBoxBlockComponent::fromCrops($block, $age))
+                ->addComponent(new MaterialInstancesBlockComponent([new Material($builder->getName() . "_{$age}", renderMethod: MaterialRenderMethod::ALPHA_TEST)])));
+        }
+    }
+
+    public static function encodeMushroom(Mushroom $block, Writer $out) : Writer{
+        return $out->writeInt(BlockStateNames::GROWTH, $block->getAge());
+    }
+
+    public static function decodeMushroom(Mushroom $block, Reader $in) : Mushroom{
+        return $block->setAge($in->readBoundedInt(BlockStateNames::GROWTH, 0, 7));
     }
 
     /**
@@ -624,23 +648,35 @@ final class NexlyPermutations
      * @param Farmland $block
      * @return void
      */
-    public static function makeFarmland(Builder $builder, Farmland $block): void
-    {
-        $stringId = $builder->getStringId();
-        $builder->setSerializer(static fn (Farmland $b) => (new Writer($stringId))->writeInt(StateNames::MOISTURIZED_AMOUNT, $b->getWetness()));
-        $builder->setDeserializer(static fn (Reader $in) => (clone $block)->setWetness($in->readInt(StateNames::MOISTURIZED_AMOUNT)));
-
-        $builder->addProperty(new BlockProperty(StateNames::MOISTURIZED_AMOUNT, range(0, Farmland::MAX_WETNESS)));
-
+    public static function makeFarmland(Builder $builder, Farmland $block): void {
         $builder->addComponent(new GeometryBlockComponent(ExtendedGeometry::FARMLAND->toString()));
         $builder->addComponent(new MaterialInstancesBlockComponent([
             new Material(
-                texture: $builder->getName(),
+                texture: $builder->getName() . "_up",
                 target: MaterialTarget::UP,
                 renderMethod: MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED
             ),
             new Material(
-                texture: $builder->getName() . "_side",
+                texture: "dirt",
+                target: MaterialTarget::ALL,
+                renderMethod: MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED
+            )
+        ]));
+        $builder->addComponent(new SelectionBoxBlockComponent(true, [BoxCollision::FARMLAND()]));
+        $builder->addComponent(new CollisionBoxBlockComponent(true, [BoxCollision::FARMLAND()]));
+        $builder->addComponent(new CustomComponentsBlockComponent(true));
+    }
+
+    public static function makePlowed(Builder $builder, PlowedMycelium $block): void {
+        $builder->addComponent(new GeometryBlockComponent(ExtendedGeometry::FARMLAND->toString()));
+        $builder->addComponent(new MaterialInstancesBlockComponent([
+            new Material(
+                texture: $builder->getName() . "_up",
+                target: MaterialTarget::UP,
+                renderMethod: MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED
+            ),
+            new Material(
+                texture: "dirt",
                 target: MaterialTarget::ALL,
                 renderMethod: MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED
             )

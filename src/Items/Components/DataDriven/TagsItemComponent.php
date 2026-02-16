@@ -30,6 +30,14 @@ class TagsItemComponent extends DataDrivenItemComponent
     }
 
     /**
+     * @return array
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    /**
      * Build the NBT tag for this component.
      *
      * @return CompoundTag

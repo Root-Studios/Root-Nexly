@@ -62,6 +62,7 @@ enum CreativeGroup: string
     case GROUP_SEED = "itemGroup.name.seed";
     case GROUP_SHOVEL = "itemGroup.name.shovel";
     case GROUP_SHULKER_BOX = "itemGroup.name.shulkerBox";
+    case GROUP_SMITHING_TEMPLATES = "itemGroup.name.smithing_templates";
     case GROUP_HANDGING_SIGN = "itemGroup.name.wallSign";
     case GROUP_SIGN = "itemGroup.name.sign";
     case GROUP_SKULL = "itemGroup.name.skull";

@@ -11,6 +11,7 @@ enum MaterialTarget: string
     case EAST = "east";
     case SOUTH = "south";
     case WEST = "west";
+    case SIDE = "side";
 
     /**
      * Returns the name of the material target.

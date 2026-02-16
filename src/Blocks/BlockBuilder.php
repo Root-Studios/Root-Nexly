@@ -90,6 +90,8 @@ use pocketmine\world\format\io\GlobalBlockStateHandlers as BlockStateHandlers;
 use pocketmine\world\format\io\GlobalItemDataHandlers as ItemDataHandlers;
 use ReflectionClass;
 
+use root\core\block\Mushroom;
+use root\core\block\PlowedMycelium;
 use function Opis\Closure\init;
 
 class BlockBuilder
@@ -769,6 +771,7 @@ class BlockBuilder
     {
         match (true) {
             $block instanceof Crops => NexlyPermutations::makeCrop($this, $block),
+            $block instanceof Mushroom => NexlyPermutations::makeMushroom($this, $block),
             $block instanceof NetherWartPlant => NexlyPermutations::makeNetherPlant($this, $block),
             $block instanceof Slab => NexlyPermutations::makeSlab($this, $block),
             $block instanceof Door => NexlyPermutations::makeDoor($this, $block),
@@ -780,6 +783,7 @@ class BlockBuilder
             $block instanceof HeadBlock => NexlyPermutations::makeHead($this, $block),
             $block instanceof Ladder => NexlyPermutations::makeLadder($this, $block),
             $block instanceof Farmland => NexlyPermutations::makeFarmland($this, $block),
+            $block instanceof PlowedMycelium => NexlyPermutations::makePlowed($this, $block),
             $block instanceof Flower => NexlyPermutations::makeFlower($this, $block),
             $block instanceof GlassPane => NexlyPermutations::makeGlassPane($this, $block),
             $block instanceof Lever => NexlyPermutations::makeLever($this, $block),

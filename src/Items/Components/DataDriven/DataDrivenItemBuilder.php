@@ -26,6 +26,7 @@ use Nexly\Items\ItemBuilder;
 use Nexly\Items\ItemVersion;
 use pocketmine\block\Air;
 use pocketmine\block\VanillaBlocks;
+use pocketmine\data\bedrock\ItemTagToIdMap;
 use pocketmine\item\Armor;
 use pocketmine\item\Bucket;
 use pocketmine\item\Durable;
@@ -43,6 +44,7 @@ use pocketmine\item\VanillaItems;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\world\format\io\GlobalItemDataHandlers;
 
 class DataDrivenItemBuilder extends ItemBuilder
 {
@@ -166,6 +168,13 @@ class DataDrivenItemBuilder extends ItemBuilder
         }
         foreach ($this->getComponents() as $k => $component) {
             $nbt->setTag($component::getName(), $component->toNBT());
+            if ($component instanceof TagsItemComponent) {
+                $item = $this->getItem();
+                $typeName = GlobalItemDataHandlers::getSerializer()->serializeType($item)->getName();
+                foreach ($component->getTags() as $tag) {
+                    ItemTagToIdMap::getInstance()->addIdToTag($tag, $typeName);
+                }
+            }
         }
 
         $nbt->setTag("item_properties", $properties);

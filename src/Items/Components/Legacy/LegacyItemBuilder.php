@@ -4,6 +4,7 @@ namespace Nexly\Items\Components\Legacy;
 
 use Nexly\Items\ItemBuilder;
 use Nexly\Items\ItemVersion;
+use Nexly\Mappings\BlockMappings;
 use pocketmine\block\Crops;
 use pocketmine\block\Door;
 use pocketmine\block\Flower;
@@ -15,6 +16,8 @@ use pocketmine\item\ConsumableItem;
 use pocketmine\item\Durable;
 use pocketmine\item\Tool;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\world\format\io\GlobalBlockStateHandlers;
+use root\core\block\Mushroom;
 
 class LegacyItemBuilder extends ItemBuilder
 {
@@ -135,6 +138,11 @@ class LegacyItemBuilder extends ItemBuilder
         $block = $item->getBlock();
         if ($block instanceof Crops) {
             $this->addComponent(SeedComponent::fromBlocks($block, VanillaBlocks::FARMLAND()));
+        } elseif ($block instanceof Mushroom) {
+            $this->addComponent(new SeedComponent(
+                GlobalBlockStateHandlers::getSerializer()->serialize($block->getStateId())->getName(),
+                ["high:plowed_mycelium"]
+            ));
         } elseif ($block instanceof NetherWartPlant) {
             $this->addComponent(SeedComponent::fromBlocks($block, VanillaBlocks::SOUL_SAND()));
         } elseif ($block instanceof Flower) {

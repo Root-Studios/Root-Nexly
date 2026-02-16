@@ -57,6 +57,7 @@ use pocketmine\item\Record;
 use pocketmine\item\Shovel;
 use pocketmine\item\SplashPotion;
 use pocketmine\item\Sword;
+use root\core\block\Mushroom;
 
 class NexlyCreative
 {
@@ -167,7 +168,7 @@ class NexlyCreative
     public static function detectCreativeInfoFromBlock(Block $block): ?CreativeInfo
     {
         return match (true) {
-            $block instanceof Crops => new CreativeInfo(null, CreativeGroup::GROUP_SEED),
+            $block instanceof Crops, $block instanceof Mushroom => new CreativeInfo(null, CreativeGroup::GROUP_SEED),
             $block instanceof Wood => new CreativeInfo(null, CreativeGroup::GROUP_LOG),
             $block instanceof Planks => new CreativeInfo(null, CreativeGroup::GROUP_PLANKS),
             $block instanceof Stair => new CreativeInfo(null, CreativeGroup::GROUP_STAIRS),
