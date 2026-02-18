@@ -25,7 +25,8 @@ abstract class Event
                 ($handler->getClosure())($this);
             }
         } catch (\Exception $e) {
-            throw PacketHandlingException::wrap($e, "Exception occurred when handling " . $this::class);
+            throw $e;
+//            throw PacketHandlingException::wrap($e, "Exception occurred when handling " . $this::class);
         }
     }
 }

@@ -58,6 +58,8 @@ use pocketmine\item\Shovel;
 use pocketmine\item\SplashPotion;
 use pocketmine\item\Sword;
 use root\core\block\Mushroom;
+use root\core\item\artefact\Artefact;
+use root\core\item\ExtraItems;
 
 class NexlyCreative
 {
@@ -105,7 +107,7 @@ class NexlyCreative
      */
     public static function add(Item $item, CreativeCategory $category = null, CreativeGroup|BackedEnum $group = null): void
     {
-        self::loadGroups(); // Ensure groups are loaded
+        self::loadGroups();
 
         if ($category === null && $group !== null) {
             $category = self::$groupToCategory[$group->getValue()];
@@ -134,6 +136,7 @@ class NexlyCreative
     public static function detectCreativeInfoFrom(Item $item): ?CreativeInfo
     {
         return match (true) {
+            $item instanceof Artefact => new CreativeInfo(CreativeCategory::EQUIPMENT, CreativeGroup::GROUP_ARTEFACT),
             $item instanceof Sword => new CreativeInfo(null, CreativeGroup::GROUP_SWORD),
             $item instanceof Pickaxe => new CreativeInfo(null, CreativeGroup::GROUP_PICKAXE),
             $item instanceof Axe => new CreativeInfo(null, CreativeGroup::GROUP_AXE),
