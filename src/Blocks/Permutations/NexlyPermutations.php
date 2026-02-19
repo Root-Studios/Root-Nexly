@@ -13,6 +13,7 @@ use Nexly\Blocks\Components\ItemVisualBlockComponent;
 use Nexly\Blocks\Components\LightDampeningBlockComponent;
 use Nexly\Blocks\Components\LightEmissionBlockComponent;
 use Nexly\Blocks\Components\MaterialInstancesBlockComponent;
+use Nexly\Blocks\Components\OnInteractComponent;
 use Nexly\Blocks\Components\RandomOffsetBlockComponent;
 use Nexly\Blocks\Components\SelectionBoxBlockComponent;
 use Nexly\Blocks\Components\TransformationBlockComponent;
@@ -537,6 +538,8 @@ final class NexlyPermutations
             ->setPowered($in->readInt(StateNames::TOGGLE_BIT))
             ->setFacing($in->readFacingWithoutUp())
         );
+
+        $builder->addComponent(new OnInteractComponent(""));
 
         $builder->addProperty(new BlockProperty(StateNames::FACING_DIRECTION, range(0, 5))); // 0: Down, 2: North, 3: South, 4: West, 5: East
         $builder->addProperty(new BlockProperty(StateNames::TOGGLE_BIT, range(0, 1)));

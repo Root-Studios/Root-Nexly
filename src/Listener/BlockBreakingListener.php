@@ -157,7 +157,7 @@ final class BlockBreakingListener implements Listener
         $pos = self::v($bp);
         $session = $player->getNetworkSession();
 
-        $session->getLogger()->debug("PlayerAction $action on $pos (face: $face)");
+//        $session->getLogger()->debug("PlayerAction $action on $pos (face: $face)");
         $last = $this->getLastBlockAttacked($handler);
 
         switch ($action) {
@@ -166,7 +166,7 @@ final class BlockBreakingListener implements Listener
                 self::validateFacing($face);
 
                 if ($last !== null && $bp->equals($last)) {
-                    $session->getLogger()->debug("Ignoring action $action on $pos (already destroying this block)");
+//                    $session->getLogger()->debug("Ignoring action $action on $pos (already destroying this block)");
                     $this->syncBlocksNearby($player, $pos, $face);
                     break;
                 }
@@ -205,7 +205,7 @@ final class BlockBreakingListener implements Listener
 
             case PlayerAction::CREATIVE_PLAYER_DESTROY_BLOCK: {
                 if (!$player->isCreative()) {
-                    $session->getLogger()->debug("Ignoring action $action on $pos (not creative)");
+//                    $session->getLogger()->debug("Ignoring action $action on $pos (not creative)");
                     $this->syncBlocksNearby($player, $pos, $face);
                     break;
                 }
@@ -217,18 +217,18 @@ final class BlockBreakingListener implements Listener
 
             case PlayerAction::PREDICT_DESTROY_BLOCK: {
                 if ($player->isCreative()) {
-                    $session->getLogger()->debug("Ignoring action $action on $pos (creative)");
+//                    $session->getLogger()->debug("Ignoring action $action on $pos (creative)");
                     break;
                 }
 
                 if ($last === null) {
-                    $session->getLogger()->debug("Ignoring action $action on $pos (no current block)");
+//                    $session->getLogger()->debug("Ignoring action $action on $pos (no current block)");
                     $this->syncBlocksNearby($player, $pos, $face);
                     break;
                 }
 
                 if ($pos->distanceSquared($player->getLocation()) > self::MAX_DIST_SQ) {
-                    $session->getLogger()->debug("Ignoring action $action on $pos (too far)");
+//                    $session->getLogger()->debug("Ignoring action $action on $pos (too far)");
                     break;
                 }
 
@@ -238,16 +238,16 @@ final class BlockBreakingListener implements Listener
                 $bh     = $hasBH ? $this->breakHandlers->offsetGet($player) : null;
 
                 if (($bh === null) && !$target->getBreakInfo()->breaksInstantly()) {
-                    $session->getLogger()->debug("Ignoring action $action on $pos (no BlockBreakHandler)");
+//                    $session->getLogger()->debug("Ignoring action $action on $pos (no BlockBreakHandler)");
                     $this->syncBlocksNearby($player, $pos, $face);
                     break;
                 }
 
                 if (($bh !== null) && !$target->getBreakInfo()->breaksInstantly()) {
-                    $session->getLogger()->debug("Predict on $pos with progress=" . $bh->getBreakProgress());
+//                    $session->getLogger()->debug("Predict on $pos with progress=" . $bh->getBreakProgress());
                     $bh->update();
                     if ($bh->getBreakProgress() < 1) {
-                        $session->getLogger()->debug("Ignoring predict (progress < 1)");
+//                        $session->getLogger()->debug("Ignoring predict (progress < 1)");
                         $this->syncBlocksNearby($player, $pos, $face);
                         break;
                     }

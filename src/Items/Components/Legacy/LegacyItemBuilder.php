@@ -4,11 +4,8 @@ namespace Nexly\Items\Components\Legacy;
 
 use Nexly\Items\ItemBuilder;
 use Nexly\Items\ItemVersion;
-use Nexly\Mappings\BlockMappings;
 use pocketmine\block\Crops;
-use pocketmine\block\Door;
 use pocketmine\block\Flower;
-use pocketmine\block\Hopper;
 use pocketmine\block\NetherWartPlant;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\entity\FoodSource;

@@ -11,7 +11,7 @@ use pocketmine\nbt\tag\StringTag;
 class OnInteractComponent extends BlockComponent
 {
     public function __construct(
-        private string $condition
+        private readonly string $condition
     ) {
     }
 
