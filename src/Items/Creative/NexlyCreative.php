@@ -60,6 +60,7 @@ use pocketmine\item\Sword;
 use root\core\block\Mushroom;
 use root\core\item\artefact\Artefact;
 use root\core\item\ExtraItems;
+use root\core\item\Key;
 
 class NexlyCreative
 {
@@ -136,6 +137,7 @@ class NexlyCreative
     public static function detectCreativeInfoFrom(Item $item): ?CreativeInfo
     {
         return match (true) {
+            $item instanceof Key => new CreativeInfo(CreativeCategory::EQUIPMENT, CreativeGroup::GROUP_KEYS),
             $item instanceof Artefact => new CreativeInfo(CreativeCategory::EQUIPMENT, CreativeGroup::GROUP_ARTEFACT),
             $item instanceof Sword => new CreativeInfo(null, CreativeGroup::GROUP_SWORD),
             $item instanceof Pickaxe => new CreativeInfo(null, CreativeGroup::GROUP_PICKAXE),
