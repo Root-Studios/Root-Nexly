@@ -16,6 +16,7 @@ use Nexly\Blocks\Components\DestructibleByExplosionBlockComponent;
 use Nexly\Blocks\Components\DestructibleByMiningBlockComponent;
 use Nexly\Blocks\Components\DisplayNameBlockComponent;
 use Nexly\Blocks\Components\FrictionBlockComponent;
+use Nexly\Blocks\Components\GeometryBlockComponent;
 use Nexly\Blocks\Components\LightEmissionBlockComponent;
 use Nexly\Blocks\Components\MaterialInstancesBlockComponent;
 use Nexly\Blocks\Components\OnInteractComponent;
@@ -60,6 +61,7 @@ use pocketmine\block\Ladder;
 use pocketmine\block\Lever;
 use pocketmine\block\Liquid;
 use pocketmine\block\NetherWartPlant;
+use pocketmine\block\Opaque;
 use pocketmine\block\RuntimeBlockStateRegistry;
 use pocketmine\block\Slab;
 use pocketmine\block\tile\Container;
@@ -89,10 +91,6 @@ use pocketmine\utils\AssumptionFailedError;
 use pocketmine\world\format\io\GlobalBlockStateHandlers as BlockStateHandlers;
 use pocketmine\world\format\io\GlobalItemDataHandlers as ItemDataHandlers;
 use ReflectionClass;
-
-use root\core\block\Mushroom;
-use root\core\block\PlowedMycelium;
-use function Opis\Closure\init;
 
 class BlockBuilder
 {
@@ -649,9 +647,14 @@ class BlockBuilder
             $this->addComponent(new DisplayNameBlockComponent("tile." . $this->getStringId() . ".name"));
             $this->addComponent(new FrictionBlockComponent(max(0, 1 - $block->getFrictionFactor())));
             $this->addComponent(new LightEmissionBlockComponent($block->getLightLevel()));
-            //$this->addComponent(new LiquidDetectionComponent(false)); // TODO: PMMP Implement Liquid Layer
-            $this->addComponent(new MaterialInstancesBlockComponent([new Material($this->getName(), renderMethod: $block->isTransparent() ? MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED : MaterialRenderMethod::OPAQUE)]));
-            $this->addComponent(new OnPlayerPlacingBlockComponent());
+            $this->addComponent(new MaterialInstancesBlockComponent([new Material(
+                $this->getName(),
+                renderMethod: ($block->isTransparent() ? MaterialRenderMethod::ALPHA_TEST_SINGLE_SIDED : MaterialRenderMethod::OPAQUE)
+            )]));
+
+            if ($block instanceof Opaque) {
+                $this->addComponent(new GeometryBlockComponent());
+            }
 
             if ($block instanceof Flowable) {
                 $this->addComponent(new ConnectionRuleComponent());
@@ -662,7 +665,7 @@ class BlockBuilder
 
             $tile = $block->getIdInfo()->getTileClass();
             if ($tile !== null && is_a($tile, Container::class, true)) {
-                $this->addComponent(new CustomComponentsBlockComponent());
+                //$this->addComponent(new CustomComponentsBlockComponent());
             }
 
             $this->addComponent(new SelectionBoxBlockComponent(true));
@@ -771,7 +774,6 @@ class BlockBuilder
     {
         match (true) {
             $block instanceof Crops => NexlyPermutations::makeCrop($this, $block),
-            $block instanceof Mushroom => NexlyPermutations::makeMushroom($this, $block),
             $block instanceof NetherWartPlant => NexlyPermutations::makeNetherPlant($this, $block),
             $block instanceof Slab => NexlyPermutations::makeSlab($this, $block),
             $block instanceof Door => NexlyPermutations::makeDoor($this, $block),
@@ -783,7 +785,6 @@ class BlockBuilder
             $block instanceof HeadBlock => NexlyPermutations::makeHead($this, $block),
             $block instanceof Ladder => NexlyPermutations::makeLadder($this, $block),
             $block instanceof Farmland => NexlyPermutations::makeFarmland($this, $block),
-            $block instanceof PlowedMycelium => NexlyPermutations::makePlowed($this, $block),
             $block instanceof Flower => NexlyPermutations::makeFlower($this, $block),
             $block instanceof GlassPane => NexlyPermutations::makeGlassPane($this, $block),
             $block instanceof Lever => NexlyPermutations::makeLever($this, $block),

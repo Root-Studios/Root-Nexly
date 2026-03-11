@@ -16,7 +16,9 @@ use pocketmine\event\EventPriority;
 use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\network\mcpe\protocol\StartGamePacket;
 use pocketmine\plugin\PluginBase;
+use pocketmine\scheduler\AsyncTask;
 use pocketmine\scheduler\ClosureTask;
+use Valres\Archaeology\Archaeology;
 
 class Nexly extends PluginBase
 {
@@ -30,11 +32,11 @@ class Nexly extends PluginBase
     {
         $config = $this->getConfig();
         if ($config->get("enable-block-breaking", true)) {
-            try {
-                $this->getServer()->getpluginManager()->registerEvents(new BlockBreakingListener(), $this);
-            } catch (\Exception $e) {
-                $this->getLogger()->error("Failed to register BlockBreakingListener: " . $e->getMessage());
-            }
+//            try {
+//                $this->getServer()->getpluginManager()->registerEvents(new BlockBreakingListener(), $this);
+//            } catch (\Exception $e) {
+//                $this->getLogger()->error("Failed to register BlockBreakingListener: " . $e->getMessage());
+//            }
         } else {
             $this->getLogger()->notice("================================");
             $this->getLogger()->notice("You can enable the BlockBreakingListener in config.yml");

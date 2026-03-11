@@ -4,9 +4,6 @@ namespace Nexly\Items\Creative;
 
 enum CreativeGroup: string
 {
-    case GROUP_KEYS = "itemGroup.keys.name";
-    case GROUP_ARTEFACT = "itemGroup.artefact.name";
-
     case GROUP_ANVIL = "itemGroup.name.anvil";
     case GROUP_ARROW = "itemGroup.name.arrow";
     case GROUP_AXE = "itemGroup.name.axe";

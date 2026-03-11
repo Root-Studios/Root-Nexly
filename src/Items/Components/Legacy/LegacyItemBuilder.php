@@ -2,6 +2,7 @@
 
 namespace Nexly\Items\Components\Legacy;
 
+use Nexly\Items\Components\DataDriven\BlockPlacerItemComponent;
 use Nexly\Items\ItemBuilder;
 use Nexly\Items\ItemVersion;
 use pocketmine\block\Crops;

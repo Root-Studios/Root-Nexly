@@ -137,8 +137,6 @@ class NexlyCreative
     public static function detectCreativeInfoFrom(Item $item): ?CreativeInfo
     {
         return match (true) {
-            $item instanceof Key => new CreativeInfo(CreativeCategory::EQUIPMENT, CreativeGroup::GROUP_KEYS),
-            $item instanceof Artefact => new CreativeInfo(CreativeCategory::EQUIPMENT, CreativeGroup::GROUP_ARTEFACT),
             $item instanceof Sword => new CreativeInfo(null, CreativeGroup::GROUP_SWORD),
             $item instanceof Pickaxe => new CreativeInfo(null, CreativeGroup::GROUP_PICKAXE),
             $item instanceof Axe => new CreativeInfo(null, CreativeGroup::GROUP_AXE),
@@ -173,7 +171,7 @@ class NexlyCreative
     public static function detectCreativeInfoFromBlock(Block $block): ?CreativeInfo
     {
         return match (true) {
-            $block instanceof Crops, $block instanceof Mushroom => new CreativeInfo(null, CreativeGroup::GROUP_SEED),
+            $block instanceof Crops => new CreativeInfo(null, CreativeGroup::GROUP_SEED),
             $block instanceof Wood => new CreativeInfo(null, CreativeGroup::GROUP_LOG),
             $block instanceof Planks => new CreativeInfo(null, CreativeGroup::GROUP_PLANKS),
             $block instanceof Stair => new CreativeInfo(null, CreativeGroup::GROUP_STAIRS),
